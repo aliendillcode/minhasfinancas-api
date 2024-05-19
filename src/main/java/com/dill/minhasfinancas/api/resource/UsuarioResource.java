@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dill.minhasfinancas.api.dto.UsuarioDTO;
 import com.dill.minhasfinancas.exceptions.ErroAutenticacao;
 import com.dill.minhasfinancas.exceptions.RegraNegocioException;
-import com.dill.minhasfinancas.model.entity.Lancamento;
 import com.dill.minhasfinancas.model.entity.Usuario;
 import com.dill.minhasfinancas.service.LancamentoService;
 import com.dill.minhasfinancas.service.UsuarioService;
@@ -30,6 +29,15 @@ public class UsuarioResource {
 	private final UsuarioService service;
 	private final LancamentoService lancamentoService;
 	
+	@PostMapping("/autenticar")
+	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
+		try {
+			Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
+			return ResponseEntity.ok(usuarioAutenticado);
+		}catch (ErroAutenticacao e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	
 	@PostMapping
 	public ResponseEntity salvar(@RequestBody UsuarioDTO dto) {
@@ -46,15 +54,8 @@ public class UsuarioResource {
 		}
 	}
 	
-	@PostMapping("/autenticar")
-	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
-		try {
-			Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-			return ResponseEntity.ok(usuarioAutenticado);
-		}catch (ErroAutenticacao e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+
+	
 	@GetMapping("{id}/saldo")
 	public ResponseEntity obterSaldo(@PathVariable("id") Long id) {
 		Optional<Usuario> usuario = service.obterPorId(id);

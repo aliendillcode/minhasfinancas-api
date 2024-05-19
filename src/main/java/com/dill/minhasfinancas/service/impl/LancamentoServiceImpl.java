@@ -54,7 +54,7 @@ public class LancamentoServiceImpl implements LancamentoService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Lancamento> buscar(Lancamento lancamentoFiltro) {
-		Example example = Example.of(lancamentoFiltro,
+		Example<Lancamento> example = Example.of(lancamentoFiltro,
 				ExampleMatcher.matching()
 				.withIgnoreCase()
 				.withStringMatcher(StringMatcher.CONTAINING));
@@ -71,7 +71,7 @@ public class LancamentoServiceImpl implements LancamentoService{
 	@Override
 	public void validar(Lancamento lancamento) {
 		if(lancamento.getDescricao() == null || lancamento.getDescricao().trim().equals("")) {
-			throw new RegraNegocioException("Inform uma descrição válida");
+			throw new RegraNegocioException("Informe uma descrição válida");
 		}
 		if(lancamento.getMes() == null || lancamento.getMes()<1 || lancamento.getMes()>12) {
 			throw new RegraNegocioException("Informe um Mês Válido");

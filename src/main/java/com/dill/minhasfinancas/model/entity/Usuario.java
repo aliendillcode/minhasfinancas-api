@@ -1,5 +1,7 @@
 package com.dill.minhasfinancas.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +32,9 @@ public class Usuario {
 	
 	@Column(name = "email")
 	private String email;
-	
 
 	@Column(name = "senha")
+	@JsonIgnore
 	private String senha;
 	
 
